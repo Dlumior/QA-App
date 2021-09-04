@@ -11,7 +11,7 @@ const questionRouter = Router();
 questionRouter.use(urlencoded({ extended: true }));
 questionRouter.use(json());
 
-questionRouter.get("/api/question", async (req: Request, res: Response) => {
+questionRouter.get("/", async (req: Request, res: Response) => {
   try {
     const questionRecord = await QuestionInstace.findAll({
       include: {
@@ -33,7 +33,7 @@ questionRouter.get("/api/question", async (req: Request, res: Response) => {
   }
 });
 
-questionRouter.get("/api/question-p/:id", async (req: Request, res: Response) => {
+questionRouter.get("/exact/:id", async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   try {
     const questionRecord = await QuestionInstace.findByPk(id, {
@@ -57,7 +57,7 @@ questionRouter.get("/api/question-p/:id", async (req: Request, res: Response) =>
   }
 });
 
-questionRouter.get("/api/question/:userId", async (req: Request, res: Response) => {
+questionRouter.get("/:userId", async (req: Request, res: Response) => {
   try {
     const questionRecord = await QuestionInstace.findAll({
       where: { userId: req.params.userId }
@@ -78,7 +78,7 @@ questionRouter.get("/api/question/:userId", async (req: Request, res: Response) 
   }
 });
 
-questionRouter.post("/api/question/:userId", async (req: Request, res: Response) => {
+questionRouter.post("/:userId", async (req: Request, res: Response) => {
   try {
     const questionRecord = await QuestionInstace.create({
       userId: parseInt(req.params.userId),
@@ -103,7 +103,7 @@ questionRouter.post("/api/question/:userId", async (req: Request, res: Response)
 });
 
 
-questionRouter.post("/api/question-s/", async (req: Request, res: Response) => {
+questionRouter.post("/search", async (req: Request, res: Response) => {
   try {
     const questionRecord = await QuestionInstace.findAll({
       where: {

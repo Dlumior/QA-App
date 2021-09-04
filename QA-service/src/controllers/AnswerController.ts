@@ -10,7 +10,7 @@ const answerRouter = Router();
 answerRouter.use(urlencoded({ extended: true }));
 answerRouter.use(json());
 
-answerRouter.get("/api/answer/:questionId", async (req: Request, res: Response) => {
+answerRouter.get("/:questionId", async (req: Request, res: Response) => {
   try {
     const answerRecord = await AnswerInstance.findAll({
       where: {questionId: parseInt(req.params.questionId)},
@@ -34,7 +34,7 @@ answerRouter.get("/api/answer/:questionId", async (req: Request, res: Response) 
   }
 });
 
-answerRouter.post("/api/answer/:questionId", async (req: Request, res: Response) => {
+answerRouter.post("/:questionId", async (req: Request, res: Response) => {
   try {
     const answerRecord = await AnswerInstance.create({
       userId: parseInt(req.body.userId),
@@ -58,7 +58,7 @@ answerRouter.post("/api/answer/:questionId", async (req: Request, res: Response)
   }
 });
 
-answerRouter.post("/api/answer/upvote/:id", async (req: Request, res: Response) => {
+answerRouter.post("/upvote/:id", async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   try {
     const answerRecordInitial = await AnswerInstance.findByPk(id);
@@ -84,7 +84,7 @@ answerRouter.post("/api/answer/upvote/:id", async (req: Request, res: Response) 
   }
 });
 
-answerRouter.post("/api/answer/downvote/:id", async (req: Request, res: Response) => {
+answerRouter.post("/downvote/:id", async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   try {
     const answerRecordInitial = await AnswerInstance.findByPk(id);

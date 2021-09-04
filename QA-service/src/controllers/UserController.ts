@@ -9,7 +9,7 @@ const userRouter = Router();
 userRouter.use(urlencoded({ extended: true }));
 userRouter.use(json());
 
-userRouter.post("/api/user/signup", async (req: Request, res: Response) => {
+userRouter.post("/signup", async (req: Request, res: Response) => {
   try {
     const userRecord = await UserInstance.create({
       username: req.body.username,
@@ -30,7 +30,7 @@ userRouter.post("/api/user/signup", async (req: Request, res: Response) => {
   }
 });
 
-userRouter.post("/api/user/signin", async (req: Request, res: Response) => {
+userRouter.post("/signin", async (req: Request, res: Response) => {
   try {
     const userRecord = await UserInstance.findOne({
       where: { username: req.body.username }

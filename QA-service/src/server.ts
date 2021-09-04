@@ -21,7 +21,7 @@ import userRouter from "./controllers/UserController";
     console.log(`Server listening on: ${5000}`);
   })
 
-  app.use(userRouter);
-  app.use(questionRouter);
-  app.use(answerRouter);
+  app.use("/api/v1/user", userRouter);
+  app.use("/api/v1/question", questionRouter);
+  app.use("/api/v1/answer", answerRouter);
 })();
