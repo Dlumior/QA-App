@@ -1,7 +1,7 @@
 export interface IQuestion {
-  id?: Number;
+  id?: number;
   title: string;
   description: string;
   solved: boolean;
-  userId?: Number;
+  userId?: number;
 }

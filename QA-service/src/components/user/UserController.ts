@@ -15,7 +15,7 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
       password: req.body.password,
     });
     return res.status(HTTP.HTTP_STATUS_OK).json({ user: newUser });
-  } catch (error) {
+  } catch (error: any) {
     return res
       .status(HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       .json(
@@ -35,7 +35,7 @@ userRouter.post('/signin', async (req: Request, res: Response) => {
     } else {
       return res.status(HTTP.HTTP_STATUS_NOT_FOUND).json({ user: {} });
     }
-  } catch (error) {
+  } catch (error: any) {
     return res
       .status(HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       .json(

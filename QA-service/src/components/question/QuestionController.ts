@@ -5,127 +5,106 @@ import { AnswerInstance } from '../answer/AnswerInstance';
 import { QuestionInstace } from './QuestionInstace';
 import { UserInstance } from '../user/UserInstance';
 import { errorHandler } from '../../utils/errorHandler';
+import {
+  createQuestion,
+  getQuestionById,
+  getQuestionByUserId,
+  getQuestions,
+  searchQuestion,
+} from './QuestionService';
+import { IQuestion } from './Question';
 
 const questionRouter = Router();
 
 questionRouter.use(urlencoded({ extended: true }));
 questionRouter.use(json());
 
+/**
+ * GET all the questions
+ */
 questionRouter.get('/', async (req: Request, res: Response) => {
   try {
-    const questionRecord = await QuestionInstace.findAll({
-      include: {
-        model: UserInstance,
-        attributes: ['username', 'createdAt', 'updatedAt'],
-      },
-    });
-    return res.status(HTTP.HTTP_STATUS_OK).json({ question: questionRecord });
-  } catch (error) {
+    const questions = await getQuestions();
+    return res.status(HTTP.HTTP_STATUS_OK).json({ question: questions });
+  } catch (error: any) {
     return res
       .status(HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       .json(
-        errorHandler(
-          'Fail to list the questions',
-          error.message,
-          HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR,
-          '/api/question'
-        )
+        errorHandler(error.message, HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       );
   }
 });
 
-questionRouter.get('/exact/:id', async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+/**
+ * GET an specific question by his ID
+ */
+questionRouter.get('/:id', async (req: Request, res: Response) => {
   try {
-    const questionRecord = await QuestionInstace.findByPk(id, {
-      include: {
-        all: true,
-      },
-    });
-    return res.status(HTTP.HTTP_STATUS_OK).json({ question: questionRecord });
-  } catch (error) {
+    const id = parseInt(req.params.id);
+    const question = await getQuestionById(id);
+    return res.status(HTTP.HTTP_STATUS_OK).json({ question: question });
+  } catch (error: any) {
     return res
       .status(HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       .json(
-        errorHandler(
-          'Fail to list the questions by userId',
-          error.message,
-          HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR,
-          `/api/question/${req.params.id}`
-        )
+        errorHandler(error.message, HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       );
   }
 });
 
-questionRouter.get('/:userId', async (req: Request, res: Response) => {
+/**
+ * GET the questions made by a user
+ */
+questionRouter.get('/user/:userId', async (req: Request, res: Response) => {
   try {
-    const questionRecord = await QuestionInstace.findAll({
-      where: { userId: req.params.userId },
-    });
-    return res.status(HTTP.HTTP_STATUS_OK).json({ question: questionRecord });
-  } catch (error) {
+    const userId = parseInt(req.params.userId);
+    const questions = await getQuestionByUserId(userId);
+    return res.status(HTTP.HTTP_STATUS_OK).json({ question: questions });
+  } catch (error: any) {
     return res
       .status(HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       .json(
-        errorHandler(
-          'Fail to list the questions by userId',
-          error.message,
-          HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR,
-          `/api/question/${req.params.id}`
-        )
+        errorHandler(error.message, HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       );
   }
 });
 
-questionRouter.post('/:userId', async (req: Request, res: Response) => {
+/**
+ * POST a question of an specific user
+ */
+questionRouter.post('/user/:userId', async (req: Request, res: Response) => {
   try {
-    const questionRecord = await QuestionInstace.create({
-      userId: parseInt(req.params.userId),
+    const userId = parseInt(req.params.userId);
+    const question: IQuestion = {
+      userId: userId,
       title: req.body.title,
       description: req.body.description,
       solved: false,
-    });
-    return res
-      .status(HTTP.HTTP_STATUS_OK)
-      .json({ question: { ...questionRecord?.get() } });
-  } catch (error) {
+    };
+    const newQuestion = await createQuestion(question);
+    return res.status(HTTP.HTTP_STATUS_OK).json({ question: newQuestion });
+  } catch (error: any) {
     return res
       .status(HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       .json(
-        errorHandler(
-          'Fail to create the question by a userId',
-          error.message,
-          HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR,
-          `/api/question/${req.params.id}`
-        )
+        errorHandler(error.message, HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       );
   }
 });
 
+/**
+ * POST to search questions by his title
+ */
 questionRouter.post('/search', async (req: Request, res: Response) => {
   try {
-    const questionRecord = await QuestionInstace.findAll({
-      where: {
-        title: {
-          [Op.substring]: req.body.query,
-        },
-      },
-      include: {
-        model: UserInstance,
-        attributes: ['username', 'createdAt', 'updatedAt'],
-      },
-    });
-    return res.status(HTTP.HTTP_STATUS_OK).json({ question: questionRecord });
-  } catch (error) {
+    const query: string = req.body.query;
+    const questions = await searchQuestion(query);
+    return res.status(HTTP.HTTP_STATUS_OK).json({ question: questions });
+  } catch (error: any) {
     return res
       .status(HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       .json(
-        errorHandler(
-          'Fail to find the question by a query',
-          error.message,
-          HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR,
-          '/api/question'
-        )
+        errorHandler(error.message, HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       );
   }
 });

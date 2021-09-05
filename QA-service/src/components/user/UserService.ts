@@ -6,7 +6,7 @@ export const createUser = async (user: IUser): Promise<IUser> => {
   try {
     const userRecord = await UserInstance.create(user);
     return userRecord.get();
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.message);
   }
 };
@@ -25,7 +25,7 @@ export const authUser = async (user: IUser): Promise<IUser | null> => {
       }
     }
     return null;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.message);
   }
 };
