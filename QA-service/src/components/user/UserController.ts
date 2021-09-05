@@ -1,8 +1,7 @@
 import { Router, json, urlencoded, Request, Response } from 'express';
-import bcrypt from 'bcrypt';
 import { constants as HTTP } from 'http2';
-import { UserInstance } from './UserInstance';
 import { errorHandler } from '../../utils/errorHandler';
+import { authUser, createUser } from './UserService';
 
 const userRouter = Router();
 
@@ -11,56 +10,36 @@ userRouter.use(json());
 
 userRouter.post('/signup', async (req: Request, res: Response) => {
   try {
-    const userRecord = await UserInstance.create({
+    const newUser = await createUser({
       username: req.body.username,
       password: req.body.password,
     });
-    return res
-      .status(HTTP.HTTP_STATUS_OK)
-      .json({ user: { ...userRecord.get() } });
+    return res.status(HTTP.HTTP_STATUS_OK).json({ user: newUser });
   } catch (error) {
     return res
       .status(HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       .json(
-        errorHandler(
-          'Fail to create the user',
-          error.message,
-          HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR,
-          '/api/user/signup'
-        )
+        errorHandler(error.message, HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       );
   }
 });
 
 userRouter.post('/signin', async (req: Request, res: Response) => {
   try {
-    const userRecord = await UserInstance.findOne({
-      where: { username: req.body.username },
+    const userAuth = await authUser({
+      username: req.body.username,
+      password: req.body.password,
     });
-    if (userRecord !== null) {
-      const hashedPassword = userRecord?.get().password;
-      const isValid = await bcrypt.compare(req.body.password, hashedPassword);
-      console.log(isValid);
-      if (isValid) {
-        return res
-          .status(HTTP.HTTP_STATUS_OK)
-          .json({ user: { ...userRecord?.get() } });
-      } else {
-        throw new Error('Wrong password');
-      }
+    if (userAuth !== null) {
+      return res.status(HTTP.HTTP_STATUS_OK).json({ user: userAuth });
     } else {
-      throw new Error('Wrong username');
+      return res.status(HTTP.HTTP_STATUS_NOT_FOUND).json({ user: {} });
     }
   } catch (error) {
     return res
       .status(HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       .json(
-        errorHandler(
-          'Fail to signin the user',
-          error.message,
-          HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR,
-          '/api/user/signin'
-        )
+        errorHandler(error.message, HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       );
   }
 });

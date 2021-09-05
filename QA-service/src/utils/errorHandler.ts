@@ -1,15 +1,8 @@
-export const errorHandler = (
-  msg: string,
-  trace = '',
-  status: Number,
-  route: string
-) => {
+export const errorHandler = (trace = '', status: Number) => {
   return {
     error: {
-      msg: msg,
       trace: trace,
       status: status,
-      route: route,
     },
   };
 };
