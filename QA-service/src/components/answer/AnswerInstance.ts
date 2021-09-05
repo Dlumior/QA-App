@@ -1,16 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
-import db from '../config/database.config';
-import { QuestionInstace } from './QuestionInstace';
-import { UserInstance } from './UserInstance';
-
-interface IAnswer {
-  id?: Number;
-  answer: string;
-  positiveRating: number;
-  negativeRating: number;
-  userId?: Number;
-  questionId?: Number;
-}
+import db from '../../config/database.config';
+import { IAnswer } from './Answer';
 
 export class AnswerInstance extends Model<IAnswer> {}
 

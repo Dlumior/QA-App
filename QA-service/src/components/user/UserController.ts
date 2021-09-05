@@ -1,8 +1,8 @@
 import { Router, json, urlencoded, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { constants as HTTP } from 'http2';
-import { UserInstance } from '../model/UserInstance';
-import { errorHandler } from '../utils/errorHandler';
+import { UserInstance } from './UserInstance';
+import { errorHandler } from '../../utils/errorHandler';
 
 const userRouter = Router();
 

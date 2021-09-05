@@ -1,14 +1,9 @@
 import { DataTypes, Model } from 'sequelize';
-import db from '../config/database.config';
-import { AnswerInstance } from './AnswerInstance';
-import { QuestionInstace } from './QuestionInstace';
+import db from '../../config/database.config';
+import { AnswerInstance } from '../answer/AnswerInstance';
+import { QuestionInstace } from '../question/QuestionInstace';
 import bcrypt from 'bcrypt';
-
-export interface IUser {
-  id?: Number;
-  username: string;
-  password: string;
-}
+import { IUser } from './User';
 
 export class UserInstance extends Model<IUser> {}
 

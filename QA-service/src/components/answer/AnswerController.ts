@@ -1,9 +1,9 @@
 import { Router, json, urlencoded, Request, Response } from 'express';
 import { constants as HTTP } from 'http2';
-import { AnswerInstance } from '../model/AnswerInstance';
-import { QuestionInstace } from '../model/QuestionInstace';
-import { UserInstance } from '../model/UserInstance';
-import { errorHandler } from '../utils/errorHandler';
+import { AnswerInstance } from './AnswerInstance';
+import { QuestionInstace } from '../question/QuestionInstace';
+import { UserInstance } from '../user/UserInstance';
+import { errorHandler } from '../../utils/errorHandler';
 
 const answerRouter = Router();
 
