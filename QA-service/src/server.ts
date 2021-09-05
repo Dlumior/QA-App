@@ -1,3 +1,4 @@
+import './config/env.config';
 import express, { urlencoded, json as expressJSON } from 'express';
 import cors from 'cors';
 
@@ -15,10 +16,11 @@ import userRouter from './controllers/UserController';
   app.use(urlencoded({ extended: true }));
   app.use(expressJSON());
 
-  app.listen(5000, () => {
-    console.log(`Server listening on: ${5000}`);
+  const PORT = process.env.PORT || 4000;
+  app.listen(PORT, () => {
+    console.log(`Server listening on: ${PORT}`);
   });
-  
+
   app.use('/api/v1/user', userRouter);
   app.use('/api/v1/question', questionRouter);
   app.use('/api/v1/answer', answerRouter);
