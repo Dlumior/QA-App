@@ -8,6 +8,31 @@ const userRouter = Router();
 userRouter.use(urlencoded({ extended: true }));
 userRouter.use(json());
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - username
+ *         - password
+ *       properties:
+ *         id:
+ *           type: number
+ *           description: The auto-generated id of the user
+ *         username:
+ *           type: string
+ *           description: The username of the user
+ *         password:
+ *           type: string
+ *           description: The password of the user
+ *       example:
+ *         id: 1
+ *         username: bob
+ *         password: 123
+ */
+
 userRouter.post('/signup', async (req: Request, res: Response) => {
   try {
     const newUser = await createUser({
