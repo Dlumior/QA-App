@@ -1,16 +1,15 @@
-import { UserInstance } from 'components/user/UserInstance';
-import { where } from 'sequelize/types';
+import { UserInstance } from '../user/UserInstance';
 import { IAnswer } from './Answer';
 import { AnswerInstance } from './AnswerInstance';
 
 export const getAnswersByQuestionId = async (questionId: number) => {
   try {
     const answerRecords = await AnswerInstance.findAll({
-      where: { questionId: questionId },
       include: {
         model: UserInstance,
         attributes: ['username', 'createdAt', 'updatedAt'],
       },
+      where: { questionId: questionId },
     });
     return answerRecords;
   } catch (error: any) {

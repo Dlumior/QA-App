@@ -1,4 +1,4 @@
-import { UserInstance } from 'components/user/UserInstance';
+import { UserInstance } from '../user/UserInstance';
 import { Op } from 'sequelize';
 import { IQuestion } from './Question';
 import { QuestionInstace } from './QuestionInstace';

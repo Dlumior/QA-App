@@ -8,7 +8,7 @@ import questionRouter from './components/question/QuestionController';
 import userRouter from './components/user/UserController';
 
 (async () => {
-  await db.sync({ force: false, logging: false });
+  await db.sync({ force: true, logging: false });
   console.log('DB is ready');
 
   const app = express();
