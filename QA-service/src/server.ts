@@ -16,20 +16,26 @@ import userRouter from './components/user/UserController';
   const PORT = process.env.PORT || 4000;
   const options: swaggerJSDoc.Options = {
     definition: {
-      openapi: '3.0.0',
+      openapi: '3.0.3',
       info: {
         title: 'QA-API',
         version: '1.0.0',
         description: 'Simple question and answer API',
       },
       servers: [{ url: `${process.env.SWAGGER_SERVER}:${PORT}` }],
+      basePath: 'api/v1/',
     },
     apis:
       process.env.NODE_ENV === 'prod'
-        ? [`${__dirname}/components/**/*.js`]
-        : [`${__dirname}/components/**/*.ts`],
+        ? [
+            `${__dirname}/components/**/*.js`,
+            `${__dirname}/components/**/controllers/*.js`,
+          ]
+        : [
+            `${__dirname}/components/**/*.ts`,
+            `${__dirname}/components/**/controllers/*.ts`,
+          ],
   };
-  console.log(`${__dirname}/components/UserController.ts`);
 
   const specs = swaggerJSDoc(options);
 

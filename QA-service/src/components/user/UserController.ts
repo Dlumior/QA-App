@@ -1,7 +1,6 @@
 import { Router, json, urlencoded, Request, Response } from 'express';
-import { constants as HTTP } from 'http2';
-import { errorHandler } from '../../utils/errorHandler';
-import { authUser, createUser } from './UserService';
+import { signup } from './controllers/signup';
+import { signin } from './controllers/signin';
 
 const userRouter = Router();
 
@@ -19,7 +18,7 @@ userRouter.use(json());
  *         - password
  *       properties:
  *         id:
- *           type: number
+ *           type: integer
  *           description: The auto-generated id of the user
  *         username:
  *           type: string
@@ -30,43 +29,62 @@ userRouter.use(json());
  *       example:
  *         id: 1
  *         username: bob
- *         password: 123
+ *         password: abc
  */
 
-userRouter.post('/signup', async (req: Request, res: Response) => {
-  try {
-    const newUser = await createUser({
-      username: req.body.username,
-      password: req.body.password,
-    });
-    return res.status(HTTP.HTTP_STATUS_OK).json({ user: newUser });
-  } catch (error: any) {
-    return res
-      .status(HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-      .json(
-        errorHandler(error.message, HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-      );
-  }
-});
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: The user managing API
+ */
 
-userRouter.post('/signin', async (req: Request, res: Response) => {
-  try {
-    const userAuth = await authUser({
-      username: req.body.username,
-      password: req.body.password,
-    });
-    if (userAuth !== null) {
-      return res.status(HTTP.HTTP_STATUS_OK).json({ user: userAuth });
-    } else {
-      return res.status(HTTP.HTTP_STATUS_NOT_FOUND).json({ user: {} });
-    }
-  } catch (error: any) {
-    return res
-      .status(HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-      .json(
-        errorHandler(error.message, HTTP.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-      );
-  }
-});
+/**
+ * @swagger
+ * /api/v1/users/signup:
+ *   post:
+ *     summary: Create a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The user was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error
+ */
+userRouter.post('/signup', signup);
+
+/**
+ * @swagger
+ * /api/v1/users/signin:
+ *   post:
+ *     summary: Search a user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The user was found successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error
+ */
+userRouter.post('/signin', signin);
 
 export default userRouter;
