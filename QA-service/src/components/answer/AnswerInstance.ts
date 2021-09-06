@@ -15,15 +15,20 @@ AnswerInstance.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    positiveRating: {
+    upvotes: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
     },
-    negativeRating: {
+    downvotes: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
+    },
+    solution: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
   },
   { sequelize: db, tableName: 'ANSWERS' }

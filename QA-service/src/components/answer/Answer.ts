@@ -1,8 +1,9 @@
 export interface IAnswer {
-  id?: Number;
+  id?: number;
   answer: string;
-  positiveRating: number;
-  negativeRating: number;
-  userId?: Number;
-  questionId?: Number;
+  upvotes: number;
+  downvotes: number;
+  solution: boolean;
+  userId?: number;
+  questionId?: number;
 }
