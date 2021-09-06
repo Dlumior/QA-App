@@ -22,7 +22,7 @@ import userRouter from './components/user/UserController';
         version: '1.0.0',
         description: 'Simple question and answer API',
       },
-      servers: [{ url: `http://localhost:${PORT}` }],
+      servers: [{ url: `${process.env.SWAGGER_SERVER}:${PORT}` }],
     },
     apis:
       process.env.NODE_ENV === 'prod'
