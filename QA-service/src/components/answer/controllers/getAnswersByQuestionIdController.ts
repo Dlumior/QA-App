@@ -3,6 +3,30 @@ import { getAnswersByQuestionId } from '../AnswerService';
 import { constants as HTTP } from 'http2';
 import { errorHandler } from '../../../utils/errorHandler';
 
+/**
+ * @swagger
+ * /api/v1/answers/{questionId}:
+ *   get:
+ *     summary: Get the answers of a question
+ *     tags: [Answers]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The question id
+ *     responses:
+ *       200:
+ *         description: The answers were successfully found
+ *         contens:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               $ref: '#/components/schemas/Answer'
+ *       404:
+ *         description: There were no answers
+ */
 export const getAnswersByQuestionIdController = async (
   req: Request,
   res: Response

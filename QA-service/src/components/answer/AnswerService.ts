@@ -33,7 +33,8 @@ export const upvoteAnswer = async (id: number) => {
       by: 1,
       where: { id: id },
     });
-    return answerRecord.get();
+    const answer = await AnswerInstance.findByPk(id);
+    return answer?.get();
   } catch (error: any) {
     throw new Error(error.message);
   }
@@ -42,10 +43,11 @@ export const upvoteAnswer = async (id: number) => {
 export const downvoteAnswer = async (id: number) => {
   try {
     const answerRecord = await AnswerInstance.increment('downvotes', {
-      by: -1,
+      by: 1,
       where: { id: id },
     });
-    return answerRecord.get();
+    const answer = await AnswerInstance.findByPk(id);
+    return answer?.get();
   } catch (error: any) {
     throw new Error(error.message);
   }
